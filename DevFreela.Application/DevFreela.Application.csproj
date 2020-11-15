@@ -4,4 +4,21 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\CreateProvidedServices\" />
+    <Folder Include="Commands\CreateSkill\" />
+    <Folder Include="Commands\StartProviderServices\" />
+    <Folder Include="Queries\GetProvidedServices\" />
+    <Folder Include="Queries\SearchFreelancer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DevFreela.Core\DevFreela.Core.csproj" />
+    <ProjectReference Include="..\DevFreela.Infrastructure.Persistence\DevFreela.Infrastructure.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>
