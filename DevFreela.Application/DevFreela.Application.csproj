@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\CreateProvidedServices\" />
-    <Folder Include="Commands\CreateSkill\" />
     <Folder Include="Commands\StartProviderServices\" />
     <Folder Include="Queries\GetProvidedServices\" />
     <Folder Include="Queries\SearchFreelancer\" />
