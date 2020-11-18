@@ -1,4 +1,5 @@
-﻿using DevFreela.Infrastructure.Persistence;
+﻿using DevFreela.Core.Interfaces.Repositores;
+using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,16 +10,16 @@ namespace DevFreela.Application.Queries.GetUser
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserViewModel>
     {
-        private readonly DevFreelaDbContext _dbContext;
+        private readonly IUserRepository _userRepository;
 
-        public GetUserQueryHandler(DevFreelaDbContext dbContext)
+        public GetUserQueryHandler(IUserRepository userRepository)
         {
-            _dbContext = dbContext;
+            _userRepository = userRepository;
         }
 
         public async Task<GetUserViewModel> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == request.IdUser);
+            var user = await _userRepository.GetUser(request.IdUser);
 
             if (user == null)
                 return null;
