@@ -1,4 +1,5 @@
-﻿using DevFreela.Application.Commands.CreateUser;
+﻿using DevFreela.API.Extensions;
+using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,19 @@ namespace DevFreela.API.Controllers
         public UsersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> Get()
+        {
+            var query = new GetAllUsersQuery();
+
+            var result = await _mediator.Send(query);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -32,7 +46,12 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserInputModel inputModel)
         {
-            var command = new CreateUserCommand(inputModel.Name, inputModel.Email, inputModel.BirthDate);
+            var command = new CreateUserCommand(
+                inputModel.Name, 
+                inputModel.Email, 
+                inputModel.BirthDate, 
+                inputModel.Password, 
+                inputModel.Role);
 
             var result = await _mediator.Send(command);
 

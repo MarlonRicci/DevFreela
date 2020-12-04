@@ -1,23 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DevFreela.API.Extensions;
+using DevFreela.API.Filters;
+using DevFreela.Application.Queries.GetUser;
+using DevFreela.Application.Validators;
+using DevFreela.Infrastructure.Persistence;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using MediatR;
-using DevFreela.Application.Queries.GetUser;
 using Microsoft.OpenApi.Models;
-using DevFreela.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using DevFreela.Core.Interfaces.Repositores;
-using DevFreela.Infrastructure.Persistence.Repositores;
-using DevFreela.API.Extensions;
 
 namespace DevFreela.API
 {
@@ -32,7 +26,8 @@ namespace DevFreela.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(o => o.Filters.Add(typeof(ValidationFilter)))
+                .AddFluentValidation(o => o.RegisterValidatorsFromAssemblyContaining<CreateUserInputModelValidator>());
 
             var connectionString = Configuration.GetConnectionString("DevFreela");
 
@@ -49,13 +44,6 @@ namespace DevFreela.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevFreela API");
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,7 +53,15 @@ namespace DevFreela.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevFreela API");
+            });
 
             app.UseEndpoints(endpoints =>
             {

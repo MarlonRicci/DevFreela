@@ -13,6 +13,7 @@ namespace DevFreela.API.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
 
             return services;
         }

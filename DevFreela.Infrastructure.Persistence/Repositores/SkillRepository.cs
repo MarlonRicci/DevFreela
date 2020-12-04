@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using DevFreela.Core.Entities;
+﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Interfaces.Repositores;
+using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositores
 {
@@ -18,7 +15,7 @@ namespace DevFreela.Infrastructure.Persistence.Repositores
 
         public async Task Add(Skill skill)
         {
-            await _dbContext.AddAsync(skill);
+            await _dbContext.Skills.AddAsync(skill);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -1,9 +1,6 @@
 ﻿using DevFreela.Core.Entities;
 using DevFreela.Core.Interfaces.Repositores;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +22,7 @@ namespace DevFreela.Application.Commands.CreateSkill
 
             await _skillRepository.Add(skill);
 
-            return new CreateSkillViewModel() { Description = skill.Description };
+            return new CreateSkillViewModel(skill.Id, skill.Description);
         }
     }
 }
