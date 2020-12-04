@@ -1,7 +1,9 @@
 ﻿using DevFreela.API.Extensions;
 using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GetUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,7 +19,8 @@ namespace DevFreela.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet()]
+        [HttpGet]
+        [Authorize(Roles = "client, freelancer")]
         public async Task<IActionResult> Get()
         {
             var query = new GetAllUsersQuery();
@@ -31,6 +34,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "freelancer")]
         public async Task<IActionResult> GetUser(int id)
         {
             var query = new GetUserQuery(id);
@@ -44,6 +48,7 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserInputModel inputModel)
         {
             var command = new CreateUserCommand(
@@ -56,6 +61,15 @@ namespace DevFreela.API.Controllers
             var result = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
         }
     }
 }

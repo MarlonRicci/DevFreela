@@ -10,6 +10,8 @@ namespace DevFreela.Application.Commands.CreateUser
             Name = name;
             Email = email;
             BirthDate = birthDate;
+            Password = password;
+            Role = role;
         }
 
         public string Name { get; set; }
